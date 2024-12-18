@@ -5,7 +5,6 @@ steps:
 
 # Run tests and deploy
 - name: 'gcr.io/cloud-builders/docker'
-  # secretEnv: ['GITHUB_TOKEN']
   args: [
     'run', 
     '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPOSITORY}/${_IMAGE}:${_TAG}',
@@ -14,8 +13,10 @@ steps:
      git config --global user.name "${_GIT_USER}" && 
      npm test && 
      npm run build && 
-     git remote set-url origin https://${_GITHUB_SECRET_}@github.com/${_GITHUB_OWNER}/${_GITHUB_REPO}.git &&
-     npx gh-pages -d dist'
+     if [ "$BRANCH_NAME" = "main" ]; then
+       git remote set-url origin https://${_GITHUB_SECRET_}@github.com/${_GITHUB_OWNER}/${_GITHUB_REPO}.git &&
+       npx gh-pages -d dist;
+     fi'
   ]
 
 # something wrong with permissions
