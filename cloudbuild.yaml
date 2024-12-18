@@ -5,12 +5,23 @@ steps:
 
 # Run tests and deploy
 - name: 'gcr.io/cloud-builders/docker'
+  secretEnv: ['GITHUB_TOKEN']
   args: [
-    'run', 'europe-west1-docker.pkg.dev/andreycloudbuild/andrey-images-repo/myapp:v2.0',
-    '/bin/sh', '-c', 'git config --global user.email "andrey.kirillov.kiev@gmail.com" && git config --global user.name "andrey_kirillov" && npm test && npm run build && npx gh-pages -d dist https://github.com/andrey-kirillov/play-momentjs']
+    'run', 
+    'europe-west1-docker.pkg.dev/andreycloudbuild/andrey-images-repo/myapp:v2.0',
+    '/bin/sh', '-c', 
+    'git config --global user.email "andrey.kirillov.kiev@gmail.com" && 
+     git config --global user.name "andrey_kirillov" && 
+     npm test && 
+     npm run build && 
+     git remote set-url origin https://$$GITHUB_TOKEN@github.com/andrey-kirillov/play-momentjs.git &&
+     npx gh-pages -d dist'
+  ]
 
-# - name: 'gcr.io/cloud-builders/docker'
-#   args: ['push', 'europe-west1-docker.pkg.dev/andreycloudbuild/andrey-images-repo/myapp:v2.0']
+availableSecrets:
+  secretManager:
+    - versionName: projects/$PROJECT_ID/secrets/github-token/versions/latest
+      env: 'GITHUB_TOKEN'
 
 options:
-  logging: CLOUD_LOGGING_ONLY  # Option 1: Use Cloud Logging only
+  logging: CLOUD_LOGGING_ONLY
