@@ -20,7 +20,7 @@ steps:
 
 availableSecrets:
   secretManager:
-    - versionName: projects/405225510239/secrets/github-token/versions/1
+    - versionName: projects/andreycloudbuild/secrets/github-token/versions/latest
       env: 'GITHUB_TOKEN'
 
 options:
