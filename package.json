@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "jest",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d dist -r https://github.com/andrey-kirillov/play-momentjs.git"
   },
   "dependencies": {
     "react": "^18.3.1",
