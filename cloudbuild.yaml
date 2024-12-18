@@ -6,7 +6,7 @@ steps:
 # Run tests and deploy
 - name: 'gcr.io/cloud-builders/docker'
   args: ['run', 'europe-west1-docker.pkg.dev/andreycloudbuild/andrey-images-repo/myapp:v2.0',
-         '/bin/sh', '-c', 'git config --global user.email "ci@example.com" && git config --global user.name "CI" && npm test && npm run build && npm run deploy']
+         '/bin/sh', '-c', 'git config --global user.email "andrey.kirillov.kiev@gmail.com" && git config --global user.name "andrey_kirillov" && npm test && npm run build && npm run deploy']
 
 # - name: 'gcr.io/cloud-builders/docker'
 #   args: ['push', 'europe-west1-docker.pkg.dev/andreycloudbuild/andrey-images-repo/myapp:v2.0']
