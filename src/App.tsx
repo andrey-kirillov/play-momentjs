@@ -2,7 +2,7 @@ function App() {
   return (
     <>
       <div>
-        Here will be some moment-js playground
+        Here will be some moment-js playground. Edited 1
       </div>
     </>
   );
