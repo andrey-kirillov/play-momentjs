@@ -1,27 +1,39 @@
 steps:
 # Build the Docker image
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'europe-west1-docker.pkg.dev/andreycloudbuild/andrey-images-repo/myapp:v2.0', '.']
+  args: ['build', '-t', '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPOSITORY}/${_IMAGE}:${_TAG}', '.']
 
 # Run tests and deploy
 - name: 'gcr.io/cloud-builders/docker'
   # secretEnv: ['GITHUB_TOKEN']
   args: [
     'run', 
-    'europe-west1-docker.pkg.dev/andreycloudbuild/andrey-images-repo/myapp:v2.0',
+    '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPOSITORY}/${_IMAGE}:${_TAG}',
     '/bin/sh', '-c', 
-    'git config --global user.email "andrey.kirillov.kiev@gmail.com" && 
-     git config --global user.name "andrey_kirillov" && 
+    'git config --global user.email "${_GIT_EMAIL}" && 
+     git config --global user.name "${_GIT_USER}" && 
      npm test && 
      npm run build && 
-     git remote set-url origin https://${_GITHUB_SECRET_}@github.com/andrey-kirillov/play-momentjs.git &&
+     git remote set-url origin https://${_GITHUB_SECRET_}@github.com/${_GITHUB_OWNER}/${_GITHUB_REPO}.git &&
      npx gh-pages -d dist'
   ]
 
+# something wrong with permissions
+# will check later
 # availableSecrets:
 #   secretManager:
 #     - versionName: projects/andreycloudbuild/secrets/github-token/versions/latest
 #       env: 'GITHUB_TOKEN'
+
+substitutions:
+  _REGION: europe-west1
+  _REPOSITORY: andrey-images-repo
+  _IMAGE: myapp
+  _TAG: v1.0
+  _GIT_EMAIL: test@gmail.com
+  _GIT_USER: test
+  _GITHUB_OWNER: andrey-kirillov
+  _GITHUB_REPO: play-momentjs
 
 options:
   logging: CLOUD_LOGGING_ONLY
