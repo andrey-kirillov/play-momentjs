@@ -1,0 +1,14 @@
+steps:
+
+# Pull the Cloud Build Helper, invoke setup to expose shorthand `cloud_build_helper`
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'europe-west1-docker.pkg.dev/engaged-code-443818-c5/cloud-build-test/myapp:v2.0', '.']
+
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['run', 'europe-west1-docker.pkg.dev/engaged-code-443818-c5/cloud-build-test/myapp:v2.0', 'npm', 'test']
+
+# - name: 'gcr.io/cloud-builders/docker'
+#   args: ['push', 'europe-west1-docker.pkg.dev/engaged-code-443818-c5/cloud-build-test/myapp:v2.0']
+
+options:
+  logging: CLOUD_LOGGING_ONLY  # Option 1: Use Cloud Logging only
