@@ -5,7 +5,7 @@ steps:
 
 # Run tests and deploy
 - name: 'gcr.io/cloud-builders/docker'
-  secretEnv: ['GITHUB_TOKEN']
+  # secretEnv: ['GITHUB_TOKEN']
   args: [
     'run', 
     'europe-west1-docker.pkg.dev/andreycloudbuild/andrey-images-repo/myapp:v2.0',
