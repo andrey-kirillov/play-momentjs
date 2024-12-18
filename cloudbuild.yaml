@@ -5,7 +5,7 @@ steps:
 
 # Run tests and deploy
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['run', '--env', 'GH_TOKEN=${_GITHUB_TOKEN}', 'europe-west1-docker.pkg.dev/andreycloudbuild/andrey-images-repo/myapp:v2.0',
+  args: ['run', 'europe-west1-docker.pkg.dev/andreycloudbuild/andrey-images-repo/myapp:v2.0',
          '/bin/sh', '-c', 'git config --global user.email "ci@example.com" && git config --global user.name "CI" && npm test && npm run build && npm run deploy']
 
 # - name: 'gcr.io/cloud-builders/docker'
@@ -13,6 +13,3 @@ steps:
 
 options:
   logging: CLOUD_LOGGING_ONLY  # Option 1: Use Cloud Logging only
-
-substitutions:
-  _GITHUB_TOKEN: $(secret:github_token)
