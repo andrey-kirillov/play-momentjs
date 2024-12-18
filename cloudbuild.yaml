@@ -14,14 +14,14 @@ steps:
      git config --global user.name "andrey_kirillov" && 
      npm test && 
      npm run build && 
-     git remote set-url origin https://$$GITHUB_TOKEN@github.com/andrey-kirillov/play-momentjs.git &&
+     git remote set-url origin https://${_GITHUB_SECRET_}@github.com/andrey-kirillov/play-momentjs.git &&
      npx gh-pages -d dist'
   ]
 
-availableSecrets:
-  secretManager:
-    - versionName: projects/andreycloudbuild/secrets/github-token/versions/latest
-      env: 'GITHUB_TOKEN'
+# availableSecrets:
+#   secretManager:
+#     - versionName: projects/andreycloudbuild/secrets/github-token/versions/latest
+#       env: 'GITHUB_TOKEN'
 
 options:
   logging: CLOUD_LOGGING_ONLY
