@@ -7,7 +7,7 @@ steps:
 - name: 'gcr.io/cloud-builders/docker'
   args: [
     'run', 'europe-west1-docker.pkg.dev/andreycloudbuild/andrey-images-repo/myapp:v2.0',
-    '/bin/sh', '-c', 'git config --global user.email "andrey.kirillov.kiev@gmail.com" && git config --global user.name "andrey_kirillov" && npm test && npm run build && npx gh-pages -d dist']
+    '/bin/sh', '-c', 'git config --global user.email "andrey.kirillov.kiev@gmail.com" && git config --global user.name "andrey_kirillov" && npm test && npm run build && npx gh-pages -d dist https://github.com/andrey-kirillov/play-momentjs']
 
 # - name: 'gcr.io/cloud-builders/docker'
 #   args: ['push', 'europe-west1-docker.pkg.dev/andreycloudbuild/andrey-images-repo/myapp:v2.0']
