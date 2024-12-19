@@ -24,5 +24,9 @@ export default [
         version: 'detect'
       }
     }
+  },
+  {
+    files: ["**/*.test.{js,ts,jsx,tsx}"],
+    languageOptions: { globals: globals.jest }
   }
 ];

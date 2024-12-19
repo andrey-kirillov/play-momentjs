@@ -1,41 +1,49 @@
+import { useState, type MutableRefObject } from 'react';
 import Box from '@mui/material/Box';
 import { Button } from '@mui/material';
-import axios from 'axios';
-import { useState } from 'react';
+import { editor } from 'monaco-editor';
 
-const API = axios.create({
-	baseURL: 'https://emkc.org/api/v2/piston',
-});
+const executeCode = (codeString: string) => {
+	// Store original console.log
+	const originalLog = console.log;
+	const logs: unknown[] = [];
 
-const executeCode = async (editorContent: string) => {
-	const response = await API.post('/execute', {
-		language: 'javascript',
-		version: '18.15.0',
-		files: [
-			{
-				content: editorContent,
-			},
-		],
-	});
+	// Override console.log
+	console.log = (...args) => {
+		logs.push(args);
+		logs.push('\n----------------------------------\n');
+		originalLog.apply(console, args);
+	};
 
-	return response.data;
+	try {
+		// Execute the code
+		eval(codeString);
+	} finally {
+		// Restore original console.log
+		console.log = originalLog;
+	}
+
+	return logs;
 };
 
-const CodeEditorOutput = ({ editorRef }) => {
+type TCodeEditorOutputProps = {
+	editorRef: MutableRefObject<editor.IStandaloneCodeEditor | null>;
+}
 
-  const [output, setOutput] = useState('');
+const CodeEditorOutput = ({
+	editorRef
+}: TCodeEditorOutputProps) => {
+	const [output, setOutput] = useState<unknown[]>([]);
 
 	const handleRunCode = async () => {
-		const sourceCode = editorRef.current.getValue();
-		if (!sourceCode)
-			console.error('Run code', sourceCode);
-
-		try {
-			const { run: result } = await executeCode(sourceCode);
-			setOutput(result.output);
-		} catch (error) {
-			console.error('Run code', error);
+		const sourceCode = editorRef?.current?.getValue();
+		if (!sourceCode) {
+			console.warn('No code to run', sourceCode);
+			return;
 		}
+
+		const logs = executeCode(sourceCode);
+		setOutput(logs);
 	};
 
 	return (
@@ -48,7 +56,13 @@ const CodeEditorOutput = ({ editorRef }) => {
 				Run
 			</Button>
 			<Box flexGrow={1} border="1px solid grey" height="100%">
-				{output}
+				<pre>
+					{output.map((log) => {
+						if (typeof log === 'string')
+							return log;
+						return JSON.stringify(log, null, 2);
+					})}
+				</pre>
 			</Box>
 		</Box>
 	);
