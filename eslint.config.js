@@ -16,6 +16,7 @@ export default [
   {
     rules: {
       'react/react-in-jsx-scope': 'off',
+      'react/prop-types': 'off',
       'semi': ['error', 'always']  // Requires semicolons at the end of statements
     },
     settings: {
@@ -23,5 +24,9 @@ export default [
         version: 'detect'
       }
     }
+  },
+  {
+    files: ["**/*.test.{js,ts,jsx,tsx}"],
+    languageOptions: { globals: globals.jest }
   }
 ];
