@@ -12,6 +12,12 @@
     "deploy": "gh-pages -d dist -r https://github.com/andrey-kirillov/play-momentjs.git"
   },
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@monaco-editor/react": "^4.6.0",
+    "@mui/lab": "^6.0.0-beta.20",
+    "@mui/material": "^6.2.1",
+    "axios": "^1.7.9",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
