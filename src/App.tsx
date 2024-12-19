@@ -9,16 +9,6 @@ import CodeEditorOutput from './components/codeEditor/codeEditorOutput';
 import moment from 'moment';
 import momentTimezone from 'moment-timezone';
 
-declare global {
-  interface Window {
-    moment: typeof moment;
-    momentTimezone: typeof momentTimezone;
-  }
-}
-
-window.moment = moment;
-window.momentTimezone = momentTimezone;
-
 const now = `
 // const browsertimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 // const timezonefromMoment = momentTimezone.tz.guess();
