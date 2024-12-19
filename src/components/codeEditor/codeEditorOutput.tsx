@@ -2,15 +2,6 @@ import { useState, type MutableRefObject } from 'react';
 import Box from '@mui/material/Box';
 import { Button } from '@mui/material';
 import { editor } from 'monaco-editor';
-import moment from 'moment';
-import momentTimezone from 'moment-timezone';
-
-declare global {
-  interface Window {
-    moment: typeof moment;
-    momentTimezone: typeof momentTimezone;
-  }
-}
 
 const executeCode = (codeString: string) => {
   // Store original console.log
@@ -23,9 +14,6 @@ const executeCode = (codeString: string) => {
     logs.push('\n----------------------------------\n');
     originalLog.apply(console, args);
   };
-
-  window.moment = moment;
-  window.momentTimezone = momentTimezone;
 
   try {
     // Execute the code
