@@ -2,6 +2,18 @@ import { useState, type MutableRefObject } from 'react';
 import Box from '@mui/material/Box';
 import { Button } from '@mui/material';
 import { editor } from 'monaco-editor';
+// include moment libs in the scope of the module
+// it can be used by eval
+import moment from 'moment';
+import momentTz from 'moment-timezone';
+
+
+// we need to use the modules somehow
+// otherwise eval will not have access to them
+console.log('modules to be used by eval', {
+  moment,
+  momentTz,
+});
 
 const executeCode = (codeString: string) => {
   // Store original console.log

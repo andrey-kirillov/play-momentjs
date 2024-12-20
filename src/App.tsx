@@ -6,25 +6,20 @@ import Tabs from '@mui/material/Tabs';
 import Typography from '@mui/material/Typography';
 import CodeEditor from './components/codeEditor/codeEditor';
 import CodeEditorOutput from './components/codeEditor/codeEditorOutput';
-import globalMoment from 'moment';
-import globalMomentTz from 'moment-timezone';
-declare global {
-  interface Window {
-    globalMoment: typeof globalMoment;
-    globalMomentTz: typeof globalMomentTz;
-  }
-}
+import moment from 'moment';
+import momentTz from 'moment-timezone';
+
 
 const now = `
 // const browsertimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-// const timezonefromMoment = globalMomentTz.tz.guess();
-// const utcOffset = globalMoment().format('Z');
+// const timezonefromMoment = momentTz.tz.guess();
+// const utcOffset = moment().format('Z');
 
 const dateNow = new Date();
-const emptyMoment = globalMoment();
-const momentWithDateNow = globalMoment(dateNow);
-const momentWithDateNowTimezone = globalMomentTz(dateNow);
-const momentTimezoneNow = globalMomentTz.tz();
+const emptyMoment = moment();
+const momentWithDateNow = moment(dateNow);
+const momentWithDateNowTimezone = momentTz(dateNow);
+const momentTimezoneNow = momentTz.tz();
 
 console.log({
   dateNow,
@@ -42,9 +37,6 @@ console.log({
   momentTimezoneNow: momentTimezoneNow.format(),
 })
 `;
-
-window.globalMoment = globalMoment;
-window.globalMomentTz = globalMomentTz;
 
 const convert = `console.log(1)`;
 
@@ -67,14 +59,14 @@ function App() {
   const editorRef = useRef(null);
 
   const browsertimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  const timezonefromMoment = globalMomentTz.tz.guess();
-  const utcOffset = globalMoment().format('Z');
+  const timezonefromMoment = momentTz.tz.guess();
+  const utcOffset = moment().format('Z');
   return (
     <Box>
       <Box display="flex" alignItems="center" justifyContent="space-between">
-        <Typography>You can use directly: <b>globalMoment</b>, <b>globalMomentTz</b></Typography>
+        <Typography>You can use directly: <b>moment</b>, <b>momentTz</b></Typography>
         <Box>
-          <Typography>My timezone from momentTimezone.tz.guess(): <b>{timezonefromMoment}</b></Typography>
+          <Typography>My timezone from momentTz.tz.guess(): <b>{timezonefromMoment}</b></Typography>
           <Typography>My timezone from Intl.DateTimeFormat().resolvedOptions().timeZone: <b>{browsertimeZone}</b></Typography>
           <Typography>My utcOffset: <b>{utcOffset}</b></Typography>
         </Box>
