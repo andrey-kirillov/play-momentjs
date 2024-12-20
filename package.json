@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint src/ --fix",
-    "preview": "vite preview",
+    "preview": "rimraf dist && npm run build && vite preview",
     "test": "jest",
     "deploy": "gh-pages -d dist -r https://github.com/andrey-kirillov/play-momentjs.git"
   },
@@ -41,6 +41,7 @@
     "globals": "^15.14.0",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
+    "rimraf": "^6.0.1",
     "typescript": "~5.6.2",
     "typescript-eslint": "^8.18.1",
     "vite": "^6.0.1"
