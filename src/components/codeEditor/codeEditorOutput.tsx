@@ -3,19 +3,73 @@ import Box from '@mui/material/Box';
 import { Button } from '@mui/material';
 import { editor } from 'monaco-editor';
 import moment from 'moment';
-import momentTz from 'moment-timezone';
+import MomentTimezone, { type Moment, type MomentInput } from 'moment-timezone';
+
+// TODO: 
+// add fake my timezone
+
+type TContextTimezone = string | null;
+let contextTimezone: TContextTimezone = null;
+type TToMomentTimezoneSync = (
+  date?: MomentInput,
+  dontConvertTime?: boolean | string,
+  timeZone?: string | boolean
+) => Moment;
+const getContextTimezone = () => contextTimezone;
+const setContextTimezone = (timezone: TContextTimezone = null) => contextTimezone = timezone;
+
+const toMomentTimezoneSync: TToMomentTimezoneSync = (date, dontConvertTime = false, _timeZone) => {
+
+  const timeZone = !_timeZone
+    ? getContextTimezone()
+    : _timeZone !== true
+      ? _timeZone
+      : Intl?.DateTimeFormat().resolvedOptions().timeZone || getContextTimezone();
+
+  let momentTz: MomentTimezone.Moment;
+  if (dontConvertTime) {
+    if (!date) {
+      date = MomentTimezone();
+
+      // We need this to be able to mock current date and timezone
+      // if (isJest)
+      //   date.tz(MomentTimezone.tz.guess());
+    }
+
+    momentTz = MomentTimezone.tz(
+      (typeof date === 'string' ? MomentTimezone.parseZone(date) : date as Moment).format('YYYY-MM-DDTHH:mm:ss'),
+      timeZone as string,
+    );
+
+    if (typeof dontConvertTime === 'string') {
+      const [hours, minutes, seconds] = dontConvertTime.split(':');
+      momentTz.set({
+        hours: Number(hours),
+        minutes: Number(minutes),
+        seconds: Number(seconds),
+      });
+    }
+  }
+  else
+    momentTz = MomentTimezone.tz(date, timeZone as string);
+  return momentTz;
+};
 
 // make moment and momentTz available in the global scope
 // so eval can use them
 declare global {
   interface Window {
     __globalMoment: typeof moment;
-    __globalMomentTz: typeof momentTz;
+    __globalMomentTz: typeof MomentTimezone;
+    __toMomentTimezoneSync: typeof toMomentTimezoneSync;
+    __setContextTimezone: typeof setContextTimezone;
   }
 }
 
 window.__globalMoment = moment;
-window.__globalMomentTz = momentTz;
+window.__globalMomentTz = MomentTimezone;
+window.__toMomentTimezoneSync = toMomentTimezoneSync;
+window.__setContextTimezone = setContextTimezone;
 
 const executeCode = (codeString: string) => {
   // Store original console.log
@@ -34,6 +88,8 @@ const executeCode = (codeString: string) => {
    (() => {
       const moment = window.__globalMoment;
       const momentTz = window.__globalMomentTz;
+      const toMomentTimezoneSync = window.__toMomentTimezoneSync;
+      const setContextTimezone = window.__setContextTimezone;
      ${codeString}
    })();
  `;
