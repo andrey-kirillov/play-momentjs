@@ -2,18 +2,20 @@ import { useState, type MutableRefObject } from 'react';
 import Box from '@mui/material/Box';
 import { Button } from '@mui/material';
 import { editor } from 'monaco-editor';
-// include moment libs in the scope of the module
-// it can be used by eval
 import moment from 'moment';
 import momentTz from 'moment-timezone';
 
+// make moment and momentTz available in the global scope
+// so eval can use them
+declare global {
+  interface Window {
+    __globalMoment: typeof moment;
+    __globalMomentTz: typeof momentTz;
+  }
+}
 
-// we need to use the modules somehow
-// otherwise eval will not have access to them
-console.log('modules to be used by eval', {
-  moment,
-  momentTz,
-});
+window.__globalMoment = moment;
+window.__globalMomentTz = momentTz;
 
 const executeCode = (codeString: string) => {
   // Store original console.log
@@ -27,9 +29,21 @@ const executeCode = (codeString: string) => {
     originalLog.apply(console, args);
   };
 
+  // Wrap the code in an IIFE to provide proper scope
+  const wrappedCode = `
+   (() => {
+      const moment = window.__globalMoment;
+      const momentTz = window.__globalMomentTz;
+     ${codeString}
+   })();
+ `;
+
   try {
     // Execute the code
-    eval(codeString);
+    eval(wrappedCode);
+  } catch (error) {
+    alert(error);
+    console.error(error);
   } finally {
     // Restore original console.log
     console.log = originalLog;
