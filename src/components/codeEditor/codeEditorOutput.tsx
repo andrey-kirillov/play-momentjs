@@ -13,7 +13,7 @@ import momentTz from 'moment-timezone';
 console.log('modules to be used by eval', {
   moment,
   momentTz,
-})
+});
 
 const executeCode = (codeString: string) => {
   // Store original console.log
