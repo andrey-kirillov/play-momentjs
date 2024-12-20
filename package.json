@@ -5,8 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
-    "lint": "eslint src/ --fix",
+    "build": "npm run lint && tsc --noEmit && vite build",
+    "lint": "eslint src/",
+    "lint:fix": "eslint src/ --fix",
     "preview": "rimraf dist && npm run build && vite preview",
     "test": "jest",
     "deploy": "gh-pages -d dist -r https://github.com/andrey-kirillov/play-momentjs.git"
